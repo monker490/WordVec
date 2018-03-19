@@ -8,9 +8,9 @@ from q4_softmaxreg import softmaxRegression, getSentenceFeature, accuracy, softm
 
 # Try different regularizations and pick the best!
 # NOTE: fill in one more "your code here" below before running!
-REGULARIZATION = None   # Assign a list of floats in the block below
+# Assign a list of floats in the block below
 ### YOUR CODE HERE
-raise NotImplementedError
+REGULARIZATION = [1e-3, 1e-4, 4e-5, 3e-5, 2e-5, 1e-5, 1e-6, 1e-7]
 ### END YOUR CODE
 
 # Load the dataset
@@ -43,6 +43,9 @@ for i in xrange(nDev):
 
 # Try our regularization parameters
 results = []
+bestReg = None
+bestWt = None
+bestAcc = 0.0
 for regularization in REGULARIZATION:
     random.seed(3141)
     np.random.seed(59265)
@@ -64,11 +67,15 @@ for regularization in REGULARIZATION:
     print "Dev accuracy (%%): %f" % devAccuracy
 
     # Save the results and weights
+    if bestAcc < devAccuracy:
+        bestAcc = devAccuracy
+        bestReg = regularization
+        bestWt = weights    
     results.append({
-        "reg" : regularization, 
-        "weights" : weights, 
-        "train" : trainAccuracy, 
-        "dev" : devAccuracy})
+		"reg" : regularization, 
+		"weights" : weights, 
+		"train" : trainAccuracy, 
+		"dev" : devAccuracy})
 
 # Print the accuracies
 print ""
@@ -82,11 +89,10 @@ for result in results:
 print ""
 
 # Pick the best regularization parameters
-BEST_REGULARIZATION = None
-BEST_WEIGHTS = None
 
 ### YOUR CODE HERE 
-raise NotImplementedError
+BEST_REGULARIZATION = bestReg
+BEST_WEIGHTS = bestWt
 ### END YOUR CODE
 
 # Test your findings on the test set
